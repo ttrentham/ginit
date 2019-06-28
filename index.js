@@ -8,17 +8,14 @@ const github       = require('./lib/github');
 const repo         = require('./lib/repo');
 const files        = require('./lib/files');
 
+const inquirer    = require('./lib/inquirer');
+
 clear();
 console.log(
   chalk.yellow(
-    figlet.textSync('Ginit', { horizontalLayout: 'full' })
+    figlet.textSync('GhTools', { horizontalLayout: 'full' })
   )
 );
-
-if (files.directoryExists('.git')) {
-  console.log(chalk.red('Already a git repository!'));
-  process.exit();
-}
 
 const getGithubToken = async () => {
   // Fetch token from config store
@@ -47,24 +44,17 @@ const getGithubToken = async () => {
 
 const run = async () => {
   try {
-    // Retrieve & Set Authentication Token
-    const token = await getGithubToken();
-    github.githubAuth(token);
+    const answers = await inquirer.askGithubOrg();
 
-    // Create remote repository
-    const url = await repo.createRemoteRepo();
+    const repos = await repo.getRemoteReposforOrg(answers.organization);
 
-    // Create .gitignore file
-    await repo.createGitignore();
+    let result = repos.map(a => a.name);
 
-    // Setup local repository and push to remote
-    const done = await repo.setupRepo(url);
-    if(done) {
-      console.log(chalk.green('All done!'));
-    }
+    console.log(result);
+
   } catch(err) {
       if (err) {
-        switch (err.code) {
+        switch (err.status) {
           case 401:
             console.log(chalk.red('Couldn\'t log you in. Please provide correct credentials/token.'));
             break;
@@ -74,6 +64,7 @@ const run = async () => {
           default:
             console.log(err);
         }
+        process.exit(1);
       }
   }
 }

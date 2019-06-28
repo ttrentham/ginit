@@ -1,7 +1,8 @@
 {
-  "name": "ginit",
+  "name": "ghtools",
   "version": "1.0.0",
-  "description": "\"git init\" on steroids",
+  "private": true,
+  "description": "Node Command Line Github Tools",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,22 +11,22 @@
     "Git",
     "CLI"
   ],
-  "author": "Lukas White <hello@lukaswhite.com>, Michael Wanyoike <micwanyoike@gmail.com>",
+  "author": "Tim Trentham <tim@blacklocus.com>",
   "license": "ISC",
   "bin": {
     "ginit": "./index.js"
   },
   "dependencies": {
-    "@octokit/rest": "^14.0.5",
-    "chalk": "^2.3.0",
+    "@octokit/rest": "^16.28.2",
+    "chalk": "^2.4.2",
     "clear": "0.0.1",
     "clui": "^0.3.6",
-    "configstore": "^3.1.1",
-    "figlet": "^1.2.0",
-    "inquirer": "^5.0.1",
-    "lodash": "^4.17.4",
+    "configstore": "^3.1.2",
+    "figlet": "^1.2.3",
+    "inquirer": "^6.4.0",
+    "lodash": "^4.17.11",
     "minimist": "^1.2.0",
-    "simple-git": "^1.89.0",
+    "simple-git": "^1.116.0",
     "touch": "^3.1.0"
   }
 }
