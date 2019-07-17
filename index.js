@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-const chalk       = require('chalk');
-const clear       = require('clear');
-const figlet      = require('figlet');
+const chalk          = require('chalk');
+const clear          = require('clear');
+const figlet         = require('figlet');
 
-const github       = require('./lib/github');
-const repo         = require('./lib/repo');
-const files        = require('./lib/files');
+const github         = require('./lib/github');
+const repo           = require('./lib/repo');
+const team           = require('./lib/team');
+const files          = require('./lib/files');
 
-const inquirer    = require('./lib/inquirer');
+const inquirer       = require('./lib/inquirer');
 
 clear();
 console.log(
@@ -44,22 +45,30 @@ const getGithubToken = async () => {
 
 const run = async () => {
   try {
-    const answers = await inquirer.askGithubOrg();
 
-    const repos = await repo.getRemoteReposforOrg(answers.organization);
+    const answersOrg = await inquirer.askGithubOrg();
 
-    let result = repos.map(a => a.name);
-
-    console.log(result);
+    //const repos = await repo.getRemoteReposforOrg(answersOrg.organization);
+    
+    const teams = await team.copyTeamPermissions(answersOrg.organization, answersOrg.source, answersOrg.destination);
 
   } catch(err) {
       if (err) {
         switch (err.status) {
+          case 400: 
+            console.log(chalk.red('Bad request - Message: ' + err.message + ' - Url: '+ err.request.url));
+            break;
           case 401:
-            console.log(chalk.red('Couldn\'t log you in. Please provide correct credentials/token.'));
+            console.log(chalk.red('Unauthorized. Likely a bad token - Message: ' + err.message));
+            break;
+          case 403:
+            console.log(chalk.red('Forbidden - Message: ' + err.message + ' - Url: ' + err.request.url));
+            break;
+          case 404:
+            console.log(chalk.red('Not Found - Message: ' + err.message + ' - Url: ' + err.request.url));
             break;
           case 422:
-            console.log(chalk.red('There already exists a remote repository with the same name'));
+            console.log(chalk.red('Unprocessable Entity - may already exist or may not be accessible. Message: ' + err.message + ' - Url: ' + err.request.url));
             break;
           default:
             console.log(err);
@@ -67,6 +76,7 @@ const run = async () => {
         process.exit(1);
       }
   }
+  process.exit(0);
 }
 
 run();
