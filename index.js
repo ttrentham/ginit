@@ -18,31 +18,6 @@ console.log(
   )
 );
 
-const getGithubToken = async () => {
-  // Fetch token from config store
-  let token = github.getStoredGithubToken();
-  if(token) {
-    return token;
-  }
-
-  // No token found, use credentials to access github account
-  await github.setGithubCredentials();
-
-  // Check if access token for ginit was registered
-  const accessToken = await github.hasAccessToken();
-  if(accessToken) {
-    console.log(chalk.yellow('An existing access token has been found!'));
-    // ask user to regenerate a new token
-    token = await github.regenerateNewToken(accessToken.id);
-    return token;
-  }
-
-  // No access token found, register one now
-  token = await github.registerNewToken();
-  return token;
-}
-
-
 const run = async () => {
   try {
 
