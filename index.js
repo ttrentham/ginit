@@ -48,9 +48,13 @@ const run = async () => {
 
     const answersOrg = await inquirer.askGithubOrg();
 
-    //const repos = await repo.getRemoteReposforOrg(answersOrg.organization);
-    
-    const teams = await team.copyTeamPermissions(answersOrg.organization, answersOrg.source, answersOrg.destination);
+    if (answersOrg.listRepos)
+      await repo.getRemoteReposforOrg(answersOrg.organization);
+
+    if (answersOrg.useteams)
+      await team.copyTeamPermissions(answersOrg.organization, answersOrg.source, answersOrg.destination);
+
+    console.log('Nothing else to do! Exiting....');
 
   } catch(err) {
       if (err) {
