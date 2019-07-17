@@ -1,7 +1,6 @@
 # Build a JavaScript Command Line Interface (CLI) with Node.js
 
-Node is a great choice for building command line tools. 
-In this tutorial, Lukas White shows you how to build a Node CLI which interacts with the GitHub API.
+This is based off of a tutorial by Lukas White showing how to build a Node CLI which interacts with the GitHub API.
 
 Article URL: https://www.sitepoint.com/javascript-command-line-interface-cli-node-js
 
@@ -17,6 +16,11 @@ Article URL: https://www.sitepoint.com/javascript-command-line-interface-cli-nod
 2. Run `npm install`
 3. Install the module globally with `npm install -g`
 4. Run `ginit <repo-name> <longer repo description>`
+
+## Usage
+This implementation assumes:
+* that you'll pass your Github token at runtime as an environment variable.
+* that you'll specify a valid Github organization as the first thing the CLI asks
 
 ## License
 
