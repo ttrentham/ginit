@@ -12,7 +12,7 @@
     "CLI"
   ],
   "author": "Tim Trentham <tim@blacklocus.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bin": {
     "ginit": "./index.js"
   },
