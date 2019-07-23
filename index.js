@@ -7,6 +7,7 @@ const figlet = require("figlet");
 const github = require("./lib/github");
 const repo = require("./lib/repo");
 const team = require("./lib/team");
+const project = require("./lib/project");
 const files = require("./lib/files");
 
 const inquirer = require("./lib/inquirer");
@@ -20,8 +21,23 @@ const run = async () => {
   try {
     const answersOrg = await inquirer.askGithubOrg();
 
-    if (answersOrg.listRepos)
-      await repo.getRemoteReposforOrg(answersOrg.organization);
+    if (answersOrg.countPublic) {
+      const repos = await repo.getRemoteReposforOrg(answersOrg.organization);
+      const publicRepos = repos.filter(repo => !repo.private);
+      console.log(
+        "There are %d public repositories in the %s organization.",
+        publicRepos.length,
+        answersOrg.organization
+      );
+
+      const projects = await project.getProjectsforOrg(answersOrg.organization);
+      const publicProjects = projects.filter(project => !project.private);
+      console.log(
+        "There are %d public projects in the %s organization.",
+        publicProjects.length,
+        answersOrg.organization
+      );
+    }
 
     if (answersOrg.useteams)
       await team.copyTeamPermissions(
