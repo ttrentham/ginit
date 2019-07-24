@@ -2,7 +2,7 @@
   "name": "ghtools",
   "version": "1.0.0",
   "private": true,
-  "description": "Node Command Line Github Tools",
+  "description": "Github Tools - defaults to interactive unless arguments are passed",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,6 +21,7 @@
     "chalk": "^2.4.2",
     "clear": "0.0.1",
     "clui": "^0.3.6",
+    "commander": "^2.20.0",
     "configstore": "^3.1.2",
     "figlet": "^1.2.3",
     "inquirer": "^6.4.0",

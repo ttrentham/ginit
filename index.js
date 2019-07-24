@@ -1,50 +1,80 @@
 #!/usr/bin/env node
 
+const { version, description } = require("./package.json");
 const chalk = require("chalk");
 const clear = require("clear");
 const figlet = require("figlet");
+const program = require("commander");
 
-const github = require("./lib/github");
 const repo = require("./lib/repo");
 const team = require("./lib/team");
 const project = require("./lib/project");
-const files = require("./lib/files");
 
 const inquirer = require("./lib/inquirer");
 
+// clear the screen
 clear();
+
+// display fancy splash title
 console.log(
   chalk.yellow(figlet.textSync("GhTools", { horizontalLayout: "full" }))
 );
 
+program
+  .version(version)
+  .description(description)
+  .arguments("<org> [source] [destination]")
+  .action(function(org, source, destination) {
+    orgValue = org;
+    sourceValue = source;
+    destValue = destination;
+  })
+  .option("-p, --public-count", "Count public github repos and projects")
+  .option("-c, --copy-team-permissions", "Copy team repository permissions")
+  .parse(process.argv);
+
 const run = async () => {
   try {
-    const answersOrg = await inquirer.askGithubOrg();
+    let countPublic,
+      copyTeams = false;
+    let organization, sourceTeam, destTeam;
 
-    if (answersOrg.countPublic) {
-      const repos = await repo.getRemoteReposforOrg(answersOrg.organization);
+    // allowing for either command-line or interactive input
+    if (program.args.length) {
+      organization = orgValue;
+      countPublic = program.publicCount;
+      copyTeams = program.copyTeamPermissions;
+      sourceTeam = sourceValue;
+      destTeam = destValue;
+    } else {
+      const answersOrg = await inquirer.askGithubOrg();
+      countPublic = answersOrg.countPublic;
+      copyTeams = answersOrg.copyTeams;
+      organization = answersOrg.organization;
+      sourceTeam = answersOrg.source;
+      destTeam = answersOrg.destination;
+    }
+
+    if (countPublic) {
+      const repos = await repo.getRemoteReposforOrg(organization);
       const publicRepos = repos.filter(repo => !repo.private);
       console.log(
         "There are %d public repositories in the %s organization.",
         publicRepos.length,
-        answersOrg.organization
+        organization
       );
 
-      const projects = await project.getProjectsforOrg(answersOrg.organization);
+      const projects = await project.getProjectsforOrg(organization);
       const publicProjects = projects.filter(project => !project.private);
       console.log(
         "There are %d public projects in the %s organization.",
         publicProjects.length,
-        answersOrg.organization
+        organization
       );
     }
 
-    if (answersOrg.useteams)
-      await team.copyTeamPermissions(
-        answersOrg.organization,
-        answersOrg.source,
-        answersOrg.destination
-      );
+    if (copyTeams)
+      await team.copyTeamPermissions(organization, sourceTeam, destTeam);
 
     console.log("Nothing else to do! Exiting....");
   } catch (err) {
@@ -78,14 +108,7 @@ const run = async () => {
           );
           break;
         case 404:
-          console.log(
-            chalk.red(
-              "Not Found - Message: " +
-                err.message +
-                " - Url: " +
-                err.request.url
-            )
-          );
+          console.log(chalk.red(err.message + " - Url: " + err.request.url));
           break;
         case 422:
           console.log(
