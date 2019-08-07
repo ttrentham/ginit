@@ -5,7 +5,7 @@
   "description": "Github Tools - defaults to interactive unless arguments are passed",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "Git",
@@ -34,6 +34,7 @@
     "eslint": "^6.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0",
     "prettier": "^1.18.2"
   }
 }
