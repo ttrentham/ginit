@@ -17,24 +17,24 @@
     "ginit": "./index.js"
   },
   "dependencies": {
-    "@octokit/rest": "^16.28.2",
+    "@octokit/rest": "^16.28.7",
     "chalk": "^2.4.2",
-    "clear": "0.0.1",
+    "clear": "^0.1.0",
     "clui": "^0.3.6",
-    "commander": "^2.20.0",
-    "configstore": "^3.1.2",
+    "commander": "^3.0.0",
+    "configstore": "^5.0.0",
     "figlet": "^1.2.3",
-    "inquirer": "^6.4.0",
-    "lodash": "^4.17.14",
+    "inquirer": "^6.5.1",
+    "lodash": "^4.17.15",
     "minimist": "^1.2.0",
-    "simple-git": "^1.116.0",
+    "simple-git": "^1.124.0",
     "touch": "^3.1.0"
   },
   "devDependencies": {
-    "eslint": "^6.0.1",
+    "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "jest": "^24.8.0",
+    "jest": "^24.9.0",
     "prettier": "^1.18.2"
   }
 }
