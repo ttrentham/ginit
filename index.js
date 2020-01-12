@@ -53,6 +53,9 @@ const run = async () => {
       organization = answersOrg.organization;
       sourceTeam = answersOrg.source;
       destTeam = answersOrg.destination;
+      listMilestone = answersOrg.issuesInMilestone;
+      repository = answersOrg.repositoryName;
+      milestone = answersOrg.milestoneNum;
     }
 
     if (countPublic) {
@@ -75,6 +78,15 @@ const run = async () => {
 
     if (copyTeams)
       await team.copyTeamPermissions(organization, sourceTeam, destTeam);
+
+    if (listMilestone) {
+      const issues = await repo.getMilestoneIssues(
+        organization,
+        repository,
+        milestone
+      );
+      console.log(issues);
+    }
 
     console.log("Nothing else to do! Exiting....");
   } catch (err) {
