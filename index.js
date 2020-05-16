@@ -23,7 +23,7 @@ console.log(
 program
   .version(version)
   .description(description)
-  .arguments("<org> [source] [destination]")
+  .arguments("[org] [source] [destination]")
   .action(function(org, source, destination) {
     orgValue = org;
     sourceValue = source;
@@ -60,7 +60,7 @@ const run = async () => {
 
     if (countPublic) {
       const repos = await repo.getRemoteReposforOrg(organization);
-      const publicRepos = repos.filter(repo => !repo.private);
+      const publicRepos = repos.filter((repo) => !repo.private);
       console.log(
         "There are %d public repositories in the %s organization.",
         publicRepos.length,
@@ -68,7 +68,7 @@ const run = async () => {
       );
 
       const projects = await project.getProjectsforOrg(organization);
-      const publicProjects = projects.filter(project => !project.private);
+      const publicProjects = projects.filter((project) => !project.private);
       console.log(
         "There are %d public projects in the %s organization.",
         publicProjects.length,
