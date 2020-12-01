@@ -24,7 +24,7 @@ program
   .version(version)
   .description(description)
   .arguments("[org] [source] [destination]")
-  .action(function(org, source, destination) {
+  .action(function (org, source, destination) {
     orgValue = org;
     sourceValue = source;
     destValue = destination;
@@ -85,7 +85,7 @@ const run = async () => {
         repository,
         milestone
       );
-      console.log(issues);
+      console.log(JSON.stringify(issues, null, 2));
     }
 
     console.log("Nothing else to do! Exiting....");
