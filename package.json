@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@octokit/graphql": "^4.6.1",
-    "@octokit/rest": "^18.4.0",
+    "@octokit/rest": "^18.5.0",
     "chalk": "^4.1.0",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
