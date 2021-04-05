@@ -48,12 +48,12 @@ const run = async () => {
       destTeam = destValue;
     } else {
       const answersOrg = await inquirer.askGithubOrg();
-      countPublic = answersOrg.countPublic;
-      copyTeams = answersOrg.copyTeams;
+      countPublic = answersOrg.chooseAction == "Count";
+      copyTeams = answersOrg.chooseAction == "CopyPerms";
       organization = answersOrg.organization;
       sourceTeam = answersOrg.source;
       destTeam = answersOrg.destination;
-      listMilestone = answersOrg.issuesInMilestone;
+      listMilestone = answersOrg.chooseAction == "MilestoneIssues";
       repository = answersOrg.repositoryName;
       milestone = answersOrg.milestoneNum;
     }
