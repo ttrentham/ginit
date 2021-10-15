@@ -96,7 +96,11 @@ const run = async () => {
     }
 
     if (showUserActivity) {
-      const prs = await repo.getPullRequests(author, utils.getFilterDaysAgo());
+      const prs = await repo.getPullRequests(
+        organization,
+        author,
+        utils.getFilterDaysAgo()
+      );
       console.log(JSON.stringify(prs, null, 2));
     }
 
