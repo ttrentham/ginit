@@ -12,6 +12,8 @@ const project = require("./lib/project");
 
 const inquirer = require("./lib/inquirer");
 
+const utils = require("./lib/utils");
+
 // clear the screen
 clear();
 
@@ -36,8 +38,11 @@ program
 const run = async () => {
   try {
     let countPublic,
-      copyTeams = false;
-    let organization, sourceTeam, destTeam;
+      copyTeams = false,
+      listMilestone,
+      showUserActivity;
+
+    let organization, sourceTeam, destTeam, repository, milestone, author;
 
     // allowing for either command-line or interactive input
     if (program.args.length) {
@@ -56,6 +61,8 @@ const run = async () => {
       listMilestone = answersOrg.chooseAction == "MilestoneIssues";
       repository = answersOrg.repositoryName;
       milestone = answersOrg.milestoneNum;
+      showUserActivity = answersOrg.chooseAction == "UserActivity";
+      author = answersOrg.userName;
     }
 
     if (countPublic) {
@@ -86,6 +93,11 @@ const run = async () => {
         milestone
       );
       console.log(JSON.stringify(issues, null, 2));
+    }
+
+    if (showUserActivity) {
+      const prs = await repo.getPullRequests(author, utils.getFilterDaysAgo());
+      console.log(JSON.stringify(prs, null, 2));
     }
 
     console.log("Nothing else to do! Exiting....");
