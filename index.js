@@ -1,18 +1,27 @@
 #!/usr/bin/env node
 
-const { version, description } = require("./package.json");
-const chalk = require("chalk");
-const clear = require("clear");
-const figlet = require("figlet");
-const program = require("commander");
+import { readFile } from "fs/promises";
+const pkg = JSON.parse(
+  await readFile(new URL("./package.json", import.meta.url))
+);
 
-const repo = require("./lib/repo");
-const team = require("./lib/team");
-const project = require("./lib/project");
+import chalk from "chalk";
+import clear from "clear";
+import figlet from "figlet";
+import program from "commander";
 
-const inquirer = require("./lib/inquirer");
+import {
+  getRemoteReposforOrg,
+  getMilestoneIssues,
+  getPullRequests,
+} from "./lib/repo.js";
 
-const utils = require("./lib/utils");
+import { copyTeamPermissions } from "./lib/team.js";
+import { getProjectsforOrg } from "./lib/project.js";
+
+import { askGithubOrg } from "./lib/inquirer.js";
+
+import { getFilterDaysAgo } from "./lib/utils.js";
 
 // clear the screen
 clear();
@@ -23,14 +32,9 @@ console.log(
 );
 
 program
-  .version(version)
-  .description(description)
+  .version(pkg.version)
+  .description(pkg.description)
   .arguments("[org] [source] [destination]")
-  .action(function (org, source, destination) {
-    orgValue = org;
-    sourceValue = source;
-    destValue = destination;
-  })
   .option("-p, --public-count", "Count public github repos and projects")
   .option("-c, --copy-team-permissions", "Copy team repository permissions")
   .parse(process.argv);
@@ -52,7 +56,7 @@ const run = async () => {
       sourceTeam = sourceValue;
       destTeam = destValue;
     } else {
-      const answersOrg = await inquirer.askGithubOrg();
+      const answersOrg = await askGithubOrg();
       countPublic = answersOrg.chooseAction == "Count";
       copyTeams = answersOrg.chooseAction == "CopyPerms";
       organization = answersOrg.organization;
@@ -66,7 +70,7 @@ const run = async () => {
     }
 
     if (countPublic) {
-      const repos = await repo.getRemoteReposforOrg(organization);
+      const repos = await getRemoteReposforOrg(organization);
       const publicRepos = repos.filter((repo) => !repo.private);
       console.log(
         "There are %d public repositories in the %s organization.",
@@ -74,7 +78,7 @@ const run = async () => {
         organization
       );
 
-      const projects = await project.getProjectsforOrg(organization);
+      const projects = await getProjectsforOrg(organization);
       const publicProjects = projects.filter((project) => !project.private);
       console.log(
         "There are %d public projects in the %s organization.",
@@ -84,10 +88,10 @@ const run = async () => {
     }
 
     if (copyTeams)
-      await team.copyTeamPermissions(organization, sourceTeam, destTeam);
+      await copyTeamPermissions(organization, sourceTeam, destTeam);
 
     if (listMilestone) {
-      const issues = await repo.getMilestoneIssues(
+      const issues = await getMilestoneIssues(
         organization,
         repository,
         milestone
@@ -96,10 +100,10 @@ const run = async () => {
     }
 
     if (showUserActivity) {
-      const prs = await repo.getPullRequests(
+      const prs = await getPullRequests(
         organization,
         author,
-        utils.getFilterDaysAgo()
+        getFilterDaysAgo()
       );
       console.log(JSON.stringify(prs, null, 2));
     }

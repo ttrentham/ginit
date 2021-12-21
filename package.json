@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "description": "Github Tools - defaults to interactive unless arguments are passed",
-  "main": "index.js",
+  "type": "module",
+  "exports": "./index.js",
   "scripts": {
-    "test": "jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
   "keywords": [
     "Git",
