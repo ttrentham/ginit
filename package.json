@@ -5,6 +5,7 @@
   "description": "Github Tools - defaults to interactive unless arguments are passed",
   "type": "module",
   "exports": "./index.js",
+  "engines": {"node": "^12.20.0 || ^14.13.1 || >=16.0.0"},
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
