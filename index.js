@@ -8,7 +8,7 @@ const pkg = JSON.parse(
 import chalk from "chalk";
 import clear from "clear";
 import figlet from "figlet";
-import program from "commander";
+import { program } from "commander";
 
 import {
   getRemoteReposforOrg,
