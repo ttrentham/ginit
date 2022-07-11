@@ -19,7 +19,7 @@
     "ginit": "./index.js"
   },
   "dependencies": {
-    "@octokit/graphql": "^4.8.0",
+    "@octokit/graphql": "^5.0.0",
     "@octokit/rest": "^18.12.0",
     "chalk": "^5.0.1",
     "clear": "^0.1.0",
